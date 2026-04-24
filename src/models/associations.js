@@ -1,5 +1,5 @@
 const users = require("./users");
-const produtcs = require("./produtcs");
+const products = require("./products");
 const request = require("./request");
 
 
@@ -15,19 +15,19 @@ request.belongsTo(users, {
 });
 
 
-produtcs.hasMany(request, {
-  foreignKey: "id_produtcs",
+products.hasMany(request, {
+  foreignKey: "id_products",
   as: "requests",
 });
 
 
-request.belongsTo(produtcs, {
-  foreignKey: "id_produtcs",
-  as: "produtcs",
+request.belongsTo(products, {
+  foreignKey: "id_products",
+  as: "products",
 });
 
 module.exports = {
   users,
-  produtcs,
+  products,
   request,
 };

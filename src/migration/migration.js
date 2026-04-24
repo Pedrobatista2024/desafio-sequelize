@@ -1,6 +1,6 @@
 const database = require('../config/database.js')
 const users = require('../models/users.js')
-const produtcs = require('../models/produtcs.js')
+const products = require('../models/products.js')
 const request = require('../models/request.js')
 const associations = require('../models/associations.js')
 

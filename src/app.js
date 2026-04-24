@@ -1,4 +1,4 @@
-require('dotenv').config(); // ESSA LINHA É OBRIGATÓRIA AQUI NO TOPO!
+require('dotenv').config();
 
 const express = require('express');
 const usersroutes = require('./routes/users.routes');

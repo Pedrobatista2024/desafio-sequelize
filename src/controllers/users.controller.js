@@ -1,27 +1,75 @@
-// 1. Importar o Modelo (No seu caso, será o de Usuário)
 const users = require('../models/users');
 
-// 2. Criar a função assíncrona
 const criarusers = async (req, res) => {
     try {
-        // 3. Capturar o que veio do corpo da requisição (JSON do Insomnia)
         const { name, login, password } = req.body;
 
-        // 4. Mandar o Sequelize gravar no banco e ESPERAR (await)
         const novousers = await users.create({
             name: name,
             login: login,
             password: password
         });
-
-        // 5. Se deu certo, responder com status 201 (Criado) e o objeto novo
         return res.status(201).json(novousers);
-
     } catch (error) {
-        // 6. Se algo deu errado (ex: campo vazio), responde com erro
         return res.status(500).json({ mensagem: "Erro ao criar: " + error.message });
     }
 };
 
-// 7. Exportar para usar nas rotas
-module.exports = { criarusers };
+const listarusers = async (req, res) => {
+    try {
+        const todosUsuarios = await users.findAll(); 
+        return res.status(200).json(todosUsuarios);
+    } catch (error) {
+        return res.status(500).json({ mensagem: "Erro ao listar todos: " + error.message })
+    }
+};
+
+const listarumuser = async (req, res) => {
+    try {
+        const usuarioEncontrado = await users.findByPk(req.params.id);
+        if (!usuarioEncontrado) {
+            return res.status(404).json({ mensagem: "Usuário não encontrado" });
+        }
+        return res.status(200).json(usuarioEncontrado);
+    } catch (error) {
+        return res.status(500).json({ mensagem: "Erro ao buscar usuário: " + error.message });
+    }
+};
+
+const editarusers = async (req, res) => {
+    try {
+        await users.update(
+            {
+                name: req.body.name,
+                login: req.body.login,
+                password: req.body.password
+            },
+            {
+                where: { id: req.params.id }
+            }
+        );
+        return res.status(200).json({ 
+            mensagem: "Usuário atualizado com sucesso!",
+        });
+    } catch (error) {
+        return res.status(500).json({ mensagem: "Erro ao editar: " + error.message });
+    }
+};
+
+const deletarusers = async (req, res) => {
+    try {
+        await users.destroy({
+            where: {
+                id: req.params.id,
+            }
+        });
+        return res.status(200).json({ 
+            mensagem: "Usuário excluído com sucesso!",
+        });
+    } catch (error) {
+        return res.status(500).json({ mensagem: "Erro ao excluir: " + error.message });
+    }
+};
+
+module.exports = { criarusers, listarusers, listarumuser, editarusers, deletarusers };
+
