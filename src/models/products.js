@@ -12,7 +12,7 @@ const productsModel = database.define('productsModel', {
         allowNull: false
     },
     price: {
-        type: DataTypes.INTEGER(10,2),
+        type: DataTypes.DECIMAL(10,2),
         allowNull: false,
     },
     stock: {
@@ -24,3 +24,4 @@ const productsModel = database.define('productsModel', {
 })
 
 module.exports = productsModel
+
