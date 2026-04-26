@@ -72,4 +72,3 @@ const deletarproducts = async (req, res) => {
 };
 
 module.exports = { criarproducts, listarproducts, listarumproduct, editarproducts, deletarproducts };
-
