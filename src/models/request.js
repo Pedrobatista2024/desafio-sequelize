@@ -12,7 +12,7 @@ const requestModel = database.define('requestModel', {
         allowNull: false
         
     },
-    id_produtcs: {
+    id_products: {
         type: DataTypes.INTEGER,
         allowNull: false
         

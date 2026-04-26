@@ -23,6 +23,7 @@ const listarproducts = async (req, res) => {
         return res.status(500).json({ mensagem: "Erro ao listar todos: " + error.message })
     }
 };
+
 const listarumproduct = async (req, res) => {
     try {
         const productEncontrado = await products.findByPk(req.params.id);
@@ -71,3 +72,4 @@ const deletarproducts = async (req, res) => {
 };
 
 module.exports = { criarproducts, listarproducts, listarumproduct, editarproducts, deletarproducts };
+
