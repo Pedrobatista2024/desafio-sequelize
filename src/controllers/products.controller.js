@@ -9,36 +9,48 @@ const criarproducts = async (req, res) => {
             price: price,
             stock: stock
         });
-        return res.status(201).json(novoproducts);
+
+        
+        const resultado = novoproducts.toJSON();
+        delete resultado.createdAt;
+        delete resultado.updatedAt;
+
+        return res.status(201).json(resultado);
     } catch (error) {
-        return res.status(500).json({ mensagem: "Erro ao criar: " + error.message });
+        return res.status(500).json({ mensagem: "Erro ao cadastrar o produto." });
     }
 };
 
 const listarproducts = async (req, res) => {
     try {
-        const todosProducts = await products.findAll(); 
+        
+        const todosProducts = await products.findAll({
+            attributes: { exclude: ['createdAt', 'updatedAt'] }
+        }); 
         return res.status(200).json(todosProducts);
     } catch (error) {
-        return res.status(500).json({ mensagem: "Erro ao listar todos: " + error.message })
+        return res.status(500).json({ mensagem: "Erro ao listar os produtos." });
     }
 };
 
 const listarumproduct = async (req, res) => {
     try {
-        const productEncontrado = await products.findByPk(req.params.id);
+        const productEncontrado = await products.findByPk(req.params.id, {
+            attributes: { exclude: ['createdAt', 'updatedAt'] }
+        });
+
         if (!productEncontrado) {
-            return res.status(404).json({ mensagem: "produto não encontrado" });
+            return res.status(404).json({ mensagem: "Produto não encontrado." });
         }
         return res.status(200).json(productEncontrado);
     } catch (error) {
-        return res.status(500).json({ mensagem: "Erro ao buscar produto: " + error.message });
+        return res.status(500).json({ mensagem: "Erro ao buscar detalhes do produto." });
     }
 };
 
 const editarproducts = async (req, res) => {
     try {
-        await products.update(
+        const [linhasAfetadas] = await products.update(
             {
                 name: req.body.name,
                 price: req.body.price,
@@ -48,26 +60,36 @@ const editarproducts = async (req, res) => {
                 where: { id: req.params.id }
             }
         );
+
+        if (linhasAfetadas === 0) {
+            return res.status(404).json({ mensagem: "Produto não encontrado para atualização." });
+        }
+
         return res.status(200).json({ 
-            mensagem: "produto atualizado com sucesso!",
+            mensagem: "Produto atualizado com sucesso!",
         });
     } catch (error) {
-        return res.status(500).json({ mensagem: "Erro ao editar: " + error.message });
+        return res.status(500).json({ mensagem: "Erro ao tentar atualizar o produto." });
     }
 };
 
 const deletarproducts = async (req, res) => {
     try {
-        await products.destroy({
+        const resultado = await products.destroy({
             where: {
                 id: req.params.id,
             }
         });
+
+        if (resultado === 0) {
+            return res.status(404).json({ mensagem: "Produto não encontrado para exclusão." });
+        }
+
         return res.status(200).json({ 
-            mensagem: "produto excluído com sucesso!",
+            mensagem: "Produto excluído com sucesso!",
         });
     } catch (error) {
-        return res.status(500).json({ mensagem: "Erro ao excluir: " + error.message });
+        return res.status(500).json({ mensagem: "Erro ao tentar remover o produto." });
     }
 };
 

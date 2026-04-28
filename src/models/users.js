@@ -22,6 +22,14 @@ const UserModel = database.define('UserModel', {
     }
 }, {
     tableName: 'users'
-})
+},{
+    tableName: 'users',
+    // BLINDAGEM AUTOMÁTICA: Esconde estes campos em qualquer consulta (findAll, findByPk, etc)
+    defaultScope: {
+        attributes: { 
+            exclude: ['password', 'createdAt', 'updatedAt'] 
+        }
+    }
+});
 
 module.exports = UserModel
